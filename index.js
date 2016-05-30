@@ -10,7 +10,7 @@
     }
 }(this, function () {
 
-    var patchPattern = /-([\w-.]+)/;
+    var patchPattern = /-([\w-]+).([0-9]+)/;
 
     function split(v) {
         var temp = v.split('.');
@@ -32,13 +32,20 @@
         }
 
         if ((s1[2] + s2[2] + '').indexOf('-') > -1) {
-            var p1 = (patchPattern.exec(s1[2]) || [''])[0];
-            var p2 = (patchPattern.exec(s2[2]) || [''])[0];
-
+            var p1 = (patchPattern.exec(s1[2]) || [''])[1];
+            var p2 = (patchPattern.exec(s2[2]) || [''])[1];
             if (p1 === '') return 1;
             if (p2 === '') return -1;
+
             if (p1 > p2) return 1;
             if (p2 > p1) return -1;
+
+            var r1 = parseInt((patchPattern.exec(s1[2]) || [''])[2] || '0');
+            var r2 = parseInt((patchPattern.exec(s2[2]) || [''])[2] || '0');
+
+            if (r1 > r2) return 1;
+            if (r2 > r1) return -1;
+
         }
 
         return 0;
